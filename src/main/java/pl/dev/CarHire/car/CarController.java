@@ -2,6 +2,7 @@ package pl.dev.CarHire.car;
 
 import org.apache.http.client.HttpResponseException;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import pl.dev.CarHire.car.payload.CarCreateRequest;
+import pl.dev.CarHire.car.payload.CarDeleteResponse;
+import pl.dev.CarHire.car.payload.CarInstanceResponse;
 import pl.dev.CarHire.car.payload.CarUpdateRequest;
 
 import java.util.List;
@@ -30,7 +33,6 @@ public class CarController {
 
     /* TODOs:
         - TODO: Obsługa błędów
-        - TODO: Dodanie DTOs
         - TODO: Dodanie Security (token JWT)
         - TODO: Dodanie swaggera
     */
@@ -44,26 +46,33 @@ public class CarController {
     @ApiResponses(value =  {
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    public List<Car> getAllCars(@RequestParam(value = "brand") Optional<String> brand, @RequestParam(value = "status") Optional<String> status) {
-        return carService.findBy(brand.orElse(null), status.orElse(null));
+    public ResponseEntity<List<Car>> getAllCars(@RequestParam(value = "brand") Optional<String> brand, @RequestParam(value = "status") Optional<String> status) {
+        List<Car> response = carService.findBy(brand.orElse(null), status.orElse(null));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/cars/{id}")
-    public Car getCarById( @PathVariable Long id) { return carService.getCarById(id); }
+    public ResponseEntity<Car> getCarById( @PathVariable Long id) {
+        Car response = carService.getCarById(id);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/cars")
-    public Car addCar(@RequestBody CarCreateRequest newCar) throws HttpResponseException {
-        return carService.addCar(newCar);
+    public ResponseEntity<CarInstanceResponse> addCar(@RequestBody CarCreateRequest newCar) throws HttpResponseException {
+        CarInstanceResponse response = carService.addCar(newCar);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/cars")
-    public Car editCar(@RequestBody CarUpdateRequest updatedCar) {
-        return carService.updateCar(updatedCar);
+    public ResponseEntity<CarInstanceResponse> editCar(@RequestBody CarUpdateRequest updatedCar) {
+        CarInstanceResponse response = carService.updateCar(updatedCar);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/cars/{id}")
-    public String deleteCar(@PathVariable Long id) {
-        return carService.deleteCar(id);
+    public ResponseEntity<CarDeleteResponse> deleteCar(@PathVariable Long id) {
+        CarDeleteResponse response = carService.deleteCar(id);
+        return ResponseEntity.ok(response);
     }
 
 }

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 
+import pl.dev.CarHire.car.payload.CarDeleteResponse;
+import pl.dev.CarHire.car.payload.CarInstanceResponse;
 import pl.dev.CarHire.city.City;
 import pl.dev.CarHire.city.CityRepository;
 import pl.dev.CarHire.car.payload.CarCreateRequest;
@@ -41,8 +43,8 @@ public class CarService {
         return carRepository.findByBrandAndStatus(brand, status);
     }
 
-    public Car addCar(CarCreateRequest newCar) throws HttpResponseException {
-        City city = cityRepository.getById(newCar.getCityId());
+    public CarInstanceResponse addCar(CarCreateRequest newCar) throws HttpResponseException {
+        City city = cityRepository.findByName(newCar.getCityName());
 
         Car car = Car.builder()
             .brand(newCar.getBrand())
@@ -56,10 +58,18 @@ public class CarService {
         Car savedCar = carRepository.save(car);
         city.getCars().add(savedCar);
 
-        return savedCar;
+        CarInstanceResponse response = CarInstanceResponse.builder()
+            .brand(car.getBrand())
+            .model(car.getModel())
+            .price(car.getPrice_per_day())
+            .cityName(car.getCity().getName())
+            .status(car.getStatus())
+            .build();
+
+        return response;
     }
 
-    public Car updateCar(CarUpdateRequest providedCar) {
+    public CarInstanceResponse updateCar(CarUpdateRequest providedCar) {
 
         City city = cityRepository.getById(providedCar.getCityId());
 
@@ -74,14 +84,26 @@ public class CarService {
 
         Car car = carRepository.save(updatedCar);
 
-        return car;
+        CarInstanceResponse response = CarInstanceResponse.builder()
+            .brand(car.getBrand())
+            .model(car.getModel())
+            .price(car.getPrice_per_day())
+            .cityName(car.getCity().getName())
+            .build();
+
+        return response;
     }
 
-    public String deleteCar(Long id) {
+    public CarDeleteResponse deleteCar(Long id) {
         Car car = getCarById(id);
 
         carRepository.delete(car);
 
-        return "Deleted";
+        CarDeleteResponse response = CarDeleteResponse.builder()
+            .carId(id)
+            .message("Car deleted.")
+            .build();
+
+        return response;
     }
 }

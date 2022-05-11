@@ -1,13 +1,11 @@
 package pl.dev.CarHire.car.payload;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class CarCreateRequest {
-
-/*
-  - TODO: City ID to City name
-*/
+@Builder
+public class CarInstanceResponse {
 
   private String brand;
   private String model;
