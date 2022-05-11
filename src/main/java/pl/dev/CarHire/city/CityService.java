@@ -11,7 +11,9 @@ import org.springframework.web.context.annotation.ApplicationScope;
 import pl.dev.CarHire.car.Car;
 import pl.dev.CarHire.car.CarRepository;
 import pl.dev.CarHire.city.payload.CityCreateRequest;
+import pl.dev.CarHire.city.payload.CityInstanceResponse;
 import pl.dev.CarHire.city.payload.CityUpdateRequest;
+import pl.dev.CarHire.common.payload.DeleteResponse;
 
 @Service
 @ApplicationScope
@@ -40,27 +42,46 @@ public class CityService {
     return cityRepository.findById(id).get();
   }
 
-  public City addCity(CityCreateRequest newCity) {
+  public CityInstanceResponse addCity(CityCreateRequest newCity) {
     City city = City.builder()
         .name(newCity.getName())
         .build();
 
-    return cityRepository.save(city);
+    City created = cityRepository.save(city);
+
+    CityInstanceResponse response = CityInstanceResponse.builder()
+        .id(created.getId())
+        .name(created.getName())
+        .build();
+
+    return response;
   }
 
-  public String deleteCity(Long id) {
+  public DeleteResponse deleteCity(Long id) {
     City city = getCityById(id);
 
     cityRepository.delete(city);
-    return "Deleted";
+
+    DeleteResponse response = DeleteResponse.builder()
+        .id(id)
+        .message("City deleted.")
+        .build();
+    return response;
   }
 
-  public City updateCity(CityUpdateRequest updatedCity) {
+  public CityInstanceResponse updateCity(CityUpdateRequest updatedCity) {
     City city = City.builder()
         .id(updatedCity.getId())
         .name(updatedCity.getName())
         .build();
 
-    return cityRepository.save(city);
+    City updated = cityRepository.save(city);
+
+    CityInstanceResponse response = CityInstanceResponse.builder()
+        .id(updated.getId())
+        .name(updated.getName())
+        .build();
+
+    return response;
   }
 }

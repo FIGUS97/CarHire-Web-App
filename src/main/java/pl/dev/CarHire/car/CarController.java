@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import pl.dev.CarHire.car.payload.CarCreateRequest;
-import pl.dev.CarHire.car.payload.CarDeleteResponse;
+import pl.dev.CarHire.common.payload.DeleteResponse;
 import pl.dev.CarHire.car.payload.CarInstanceResponse;
 import pl.dev.CarHire.car.payload.CarUpdateRequest;
 
@@ -70,8 +70,8 @@ public class CarController {
     }
 
     @DeleteMapping("/cars/{id}")
-    public ResponseEntity<CarDeleteResponse> deleteCar(@PathVariable Long id) {
-        CarDeleteResponse response = carService.deleteCar(id);
+    public ResponseEntity<DeleteResponse> deleteCar(@PathVariable Long id) {
+        DeleteResponse response = carService.deleteCar(id);
         return ResponseEntity.ok(response);
     }
 

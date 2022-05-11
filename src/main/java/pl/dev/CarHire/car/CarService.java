@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 
-import pl.dev.CarHire.car.payload.CarDeleteResponse;
+import pl.dev.CarHire.common.payload.DeleteResponse;
 import pl.dev.CarHire.car.payload.CarInstanceResponse;
 import pl.dev.CarHire.city.City;
 import pl.dev.CarHire.city.CityRepository;
@@ -94,13 +94,13 @@ public class CarService {
         return response;
     }
 
-    public CarDeleteResponse deleteCar(Long id) {
+    public DeleteResponse deleteCar(Long id) {
         Car car = getCarById(id);
 
         carRepository.delete(car);
 
-        CarDeleteResponse response = CarDeleteResponse.builder()
-            .carId(id)
+        DeleteResponse response = DeleteResponse.builder()
+            .id(id)
             .message("Car deleted.")
             .build();
 
