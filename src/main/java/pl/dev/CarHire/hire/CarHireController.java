@@ -2,6 +2,7 @@ package pl.dev.CarHire.hire;
 
 import org.apache.http.client.HttpResponseException;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import pl.dev.CarHire.common.payload.DeleteResponse;
 import pl.dev.CarHire.hire.payload.CarHireCreateRequest;
+import pl.dev.CarHire.hire.payload.CarHireInstanceResponse;
 import pl.dev.CarHire.hire.payload.CarHireUpdateRequest;
 
 import java.util.List;
@@ -40,40 +43,50 @@ public class CarHireController {
   }
 
   @GetMapping("/carHires")
-  @Operation(summary = "Getting all cars", description = "Just getting all cars")
+  @Operation(summary = "Getting all car hires", description = "Just getting all car hires")
   @ApiResponses(value =  {
       @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
   })
-  public List<CarHire> getAllCars(
+  public ResponseEntity<List<CarHireInstanceResponse>> getAllCarHires(
       @RequestParam(value = "userId", required = false) Optional<Long> userId,
       @RequestParam(value = "carId", required = false) Optional<Long> carId,
       @RequestParam(value = "status", required = false) Optional<String> status,
       @RequestParam(value = "days", required = false) Optional<Integer> days,
       @RequestParam(value = "price", required = false) Optional<Float> price) {
-    return carHireService.findBy(
+    List<CarHireInstanceResponse> response = carHireService.findBy(
         userId.orElse(null),
         carId.orElse(null),
         status.orElse(null),
         days.orElse(null),
         price.orElse(null));
+
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping("/carHires/{id}")
-  public CarHire getCarHireById( @PathVariable Long id) { return carHireService.getCarHireById(id); }
+  public ResponseEntity<CarHire> getCarHireById( @PathVariable Long id) {
+
+    CarHire response = carHireService.getCarHireById(id);
+    return ResponseEntity.ok(response);
+  }
 
   @PostMapping("/carHires")
-  public CarHire addCarHire(@RequestBody CarHireCreateRequest newCarHire) throws HttpResponseException {
-    return carHireService.addCarHire(newCarHire);
+  public ResponseEntity<CarHireInstanceResponse> addCarHire(@RequestBody CarHireCreateRequest newCarHire) throws HttpResponseException {
+
+    CarHireInstanceResponse response = carHireService.addCarHire(newCarHire);
+    return ResponseEntity.ok(response);
   }
 
   @PutMapping("/carHires")
-  public CarHire editCarHire(@RequestBody CarHireUpdateRequest updatedCarHire) {
-    return carHireService.updateCarHire(updatedCarHire);
+  public ResponseEntity<CarHireInstanceResponse> editCarHire(@RequestBody CarHireUpdateRequest updatedCarHire) {
+    CarHireInstanceResponse response = carHireService.updateCarHire(updatedCarHire);
+    return ResponseEntity.ok(response);
   }
 
   @DeleteMapping("/carHires/{id}")
-  public String deleteCarHire(@PathVariable Long id) {
-    return carHireService.deleteCarHire(id);
+  public ResponseEntity<DeleteResponse> deleteCarHire(@PathVariable Long id) {
+    DeleteResponse response = carHireService.deleteCarHire(id);
+    return ResponseEntity.ok(response);
   }
 
 }

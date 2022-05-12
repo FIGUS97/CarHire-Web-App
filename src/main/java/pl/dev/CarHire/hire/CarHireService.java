@@ -5,13 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 import pl.dev.CarHire.car.Car;
+import pl.dev.CarHire.car.payload.CarInstanceResponse;
+import pl.dev.CarHire.common.payload.DeleteResponse;
+import pl.dev.CarHire.hire.payload.CarHireInstanceResponse;
 import pl.dev.CarHire.user.User;
 import pl.dev.CarHire.car.CarRepository;
 import pl.dev.CarHire.city.CityRepository;
 import pl.dev.CarHire.user.UserRepository;
 import pl.dev.CarHire.hire.payload.CarHireCreateRequest;
 import pl.dev.CarHire.hire.payload.CarHireUpdateRequest;
+import pl.dev.CarHire.user.payload.UserInstanceResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,11 +50,17 @@ public class CarHireService {
     return carHireRepository.findById(id).get();
   }
 
-  public List<CarHire> findBy(Long userId, Long carId, String status, Integer days, Float price) {
-    return carHireRepository.findByAttributes(userId, carId, status, days, price);
+  public List<CarHireInstanceResponse> findBy(Long userId, Long carId, String status, Integer days, Float price) {
+
+    List<CarHire> hires = carHireRepository.findByAttributes(userId, carId, status, days, price);
+
+    List<CarHireInstanceResponse> responses = new ArrayList<>();
+    hires.forEach(hire -> responses.add(carHireToCarHireInstanceResponse(hire)));
+
+    return responses;
   }
 
-  public CarHire addCarHire(CarHireCreateRequest newCarHire) throws HttpResponseException {
+  public CarHireInstanceResponse addCarHire(CarHireCreateRequest newCarHire) throws HttpResponseException {
     User customer = userRepository.getById(newCarHire.getUserId());
     Car car = carRepository.getById(newCarHire.getCarId());
 
@@ -65,10 +76,12 @@ public class CarHireService {
     CarHire savedCarHire = carHireRepository.save(carHire);
     car.getCarHires().add(savedCarHire);
 
-    return savedCarHire;
+    CarHireInstanceResponse response = carHireToCarHireInstanceResponse(savedCarHire);
+
+    return response;
   }
 
-  public CarHire updateCarHire(CarHireUpdateRequest providedCarHire) {
+  public CarHireInstanceResponse updateCarHire(CarHireUpdateRequest providedCarHire) {
 
     CarHire currentCarHire = carHireRepository.getById(providedCarHire.getId());
 
@@ -82,17 +95,42 @@ public class CarHireService {
         .build();
 
     CarHire carHire = carHireRepository.save(updatedCarHire);
-    
 
-    return carHire;
+    CarHireInstanceResponse response = carHireToCarHireInstanceResponse(updatedCarHire);
+
+    return response;
   }
 
-  public String deleteCarHire(Long id) {
+  public DeleteResponse deleteCarHire(Long id) {
     CarHire carHire = getCarHireById(id);
 
     //carHire.getCar().getCarHires().remove(carHire);
     carHireRepository.delete(carHire);
 
-    return "Deleted";
+    DeleteResponse response = DeleteResponse.builder()
+        .id(id)
+        .message("Car hire deleted.")
+        .build();
+    return response;
+  }
+
+  private CarHireInstanceResponse carHireToCarHireInstanceResponse (CarHire hire) {
+    CarHireInstanceResponse response = CarHireInstanceResponse.builder()
+        .car(CarInstanceResponse.builder()
+            .brand(hire.getCar().getBrand())
+            .model(hire.getCar().getModel())
+            .status(hire.getCar().getStatus())
+            .cityName(hire.getCar().getCity().getName())
+            .price(hire.getCar().getPrice_per_day())
+            .build())
+        .id(hire.getId())
+        .status(hire.getStatus())
+        .price(hire.getAmount())
+        .days(hire.getNumber_days())
+        .user(UserInstanceResponse.builder()
+            .name_surname(hire.getCustomer().getName_surname())
+            .build())
+        .build();
+    return response;
   }
 }

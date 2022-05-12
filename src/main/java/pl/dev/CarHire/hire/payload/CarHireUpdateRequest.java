@@ -6,14 +6,9 @@ import lombok.Data;
 public class CarHireUpdateRequest {
 
   private Long id;
-
   private Long userId;
-
   private Long carId;
-
   private String status;
-
   private int days;
-
   private float price;
 }
