@@ -1,6 +1,7 @@
 package pl.dev.CarHire.car;
 
 import org.apache.http.client.HttpResponseException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
@@ -13,6 +14,7 @@ import pl.dev.CarHire.car.payload.CarCreateRequest;
 import pl.dev.CarHire.car.payload.CarUpdateRequest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @ApplicationScope
@@ -22,7 +24,6 @@ public class CarService {
         - TODO: Test obsługi zależności w bazie danych
         - TODO: Obsługa błędów http
         - TODO: Mappery
-           
      */
 
     @Autowired
@@ -30,6 +31,12 @@ public class CarService {
 
     @Autowired
     private CityRepository cityRepository;
+
+    private final ModelMapper modelMapper;
+
+    public CarService() {
+        this.modelMapper = new ModelMapper();
+    }
 
     public List<Car> getAllCars() {
         return carRepository.findAll();
@@ -39,8 +46,14 @@ public class CarService {
         return carRepository.findById(id).get();
     }
 
-    public List<Car> findBy( String brand, String status) {
-        return carRepository.findByBrandAndStatus(brand, status);
+    public List<CarInstanceResponse> findBy( String brand, String status) {
+        List<CarInstanceResponse> cars = carRepository
+            .findByBrandAndStatus(brand, status)
+            .stream()
+            .map(car -> modelMapper.map(car, CarInstanceResponse.class))
+            .collect(Collectors.toList());
+
+        return cars;
     }
 
     public CarInstanceResponse addCar(CarCreateRequest newCar) throws HttpResponseException {
@@ -50,7 +63,7 @@ public class CarService {
             .brand(newCar.getBrand())
             .model(newCar.getModel())
             .status(newCar.getStatus())
-            .price_per_day(newCar.getPrice())
+            .pricePerDay(newCar.getPrice())
             .city(city)
             .build();
 
@@ -58,13 +71,7 @@ public class CarService {
         Car savedCar = carRepository.save(car);
         city.getCars().add(savedCar);
 
-        CarInstanceResponse response = CarInstanceResponse.builder()
-            .brand(car.getBrand())
-            .model(car.getModel())
-            .price(car.getPrice_per_day())
-            .cityName(car.getCity().getName())
-            .status(car.getStatus())
-            .build();
+        CarInstanceResponse response = modelMapper.map(car, CarInstanceResponse.class);
 
         return response;
     }
@@ -79,17 +86,12 @@ public class CarService {
             .model(providedCar.getModel())
             .status(providedCar.getStatus())
             .city(city)
-            .price_per_day(providedCar.getPrice())
+            .pricePerDay(providedCar.getPrice())
             .build();
 
         Car car = carRepository.save(updatedCar);
 
-        CarInstanceResponse response = CarInstanceResponse.builder()
-            .brand(car.getBrand())
-            .model(car.getModel())
-            .price(car.getPrice_per_day())
-            .cityName(car.getCity().getName())
-            .build();
+        CarInstanceResponse response = modelMapper.map(car, CarInstanceResponse.class);
 
         return response;
     }

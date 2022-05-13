@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.client.HttpResponseException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,12 @@ public class UserService {
 
   @Autowired
   private RoleRepository roleRepository;
+
+  private final ModelMapper modelMapper;
+
+  public UserService() {
+    this.modelMapper = new ModelMapper();
+  }
 
   public List<User> getAllUsers() {
     return userRepository.findAll();
@@ -70,7 +77,7 @@ public class UserService {
     User savedUser = userRepository.save(user);
     city.getUsers().add(savedUser);
 
-    return userToUserInstanceResponse(savedUser);
+    return modelMapper.map(savedUser, UserInstanceResponse.class);
   }
 
   public UserInstanceResponse updateUser(UserUpdateRequest providedUser) {
@@ -93,7 +100,7 @@ public class UserService {
 
     User updatedUser = userRepository.save(user);
 
-    return userToUserInstanceResponse(updatedUser);
+    return modelMapper.map(updatedUser, UserInstanceResponse.class);
   }
 
   public DeleteResponse deleteUser(Long id) {

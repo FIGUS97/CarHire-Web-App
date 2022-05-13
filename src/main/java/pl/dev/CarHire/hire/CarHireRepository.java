@@ -15,8 +15,8 @@ public interface CarHireRepository extends JpaRepository<CarHire, Long> {
       + "(:userId is null or c.customer = :userId) and "
       + "(:carId is null or c.car = :carId) and "
       + "(:status is null or c.status = :status) and "
-      + "(:days is null or c.number_days = :days) and "
-      + "(:price is null or c.amount = :price)")
+      + "(:days is null or c.days = :days) and "
+      + "(:price is null or c.price = :price)")
   List<CarHire> findByAttributes(
         @Param("userId") Long userId,
         @Param("carId") Long carId,

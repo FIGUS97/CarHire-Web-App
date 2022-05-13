@@ -40,9 +40,9 @@ public class CarHire {
     public String status;
 
     @Column(name = "Number_days")
-    public Integer number_days;
+    public Integer days;
 
     @Column(name = "Amount")
-    public Float amount;
+    public Float price;
 
 }

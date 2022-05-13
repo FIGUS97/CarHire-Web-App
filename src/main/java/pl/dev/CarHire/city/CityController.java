@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import pl.dev.CarHire.car.Car;
+import pl.dev.CarHire.car.payload.CarInstanceResponse;
 import pl.dev.CarHire.city.payload.CityCreateRequest;
 import pl.dev.CarHire.city.payload.CityInstanceResponse;
 import pl.dev.CarHire.city.payload.CityUpdateRequest;
@@ -38,11 +39,12 @@ public class CityController {
         - TODO: Dodanie DTOs
         - TODO: Dodanie Security (token JWT)
         - TODO: Dodanie swaggera
+        - TODO: Przerobienie endpointów na biznesowe
     */
 
   @GetMapping("/{cityName}/cars")
-  public ResponseEntity<List<Car>> getCars(@PathVariable(value = "cityName") String cityName) {
-    List<Car> response = cityService.getCarsForCity(cityName);
+  public ResponseEntity<List<CarInstanceResponse>> getCars(@PathVariable(value = "cityName") String cityName) {
+    List<CarInstanceResponse> response = cityService.getCarsForCity(cityName);
     return ResponseEntity.ok(response);
   }
 
@@ -51,13 +53,13 @@ public class CityController {
   @ApiResponses(value =  {
       @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
   })
-  public ResponseEntity<List<City>> getAllCities(@RequestParam(value = "name") Optional<String> name) {
-    List<City> response = cityService.findAllBy(name);
+  public ResponseEntity<List<CityInstanceResponse>> getAllCities(@RequestParam(value = "name") Optional<String> name) {
+    List<CityInstanceResponse> response = cityService.findAllBy(name);
     return ResponseEntity.ok(response);
   }
 
   @GetMapping("/cities/{id}")
-  public ResponseEntity<City> getCarById( @PathVariable Long id) {
+  public ResponseEntity<City> getCityById( @PathVariable Long id) {
     City city = cityService.getCityById(id);
     return ResponseEntity.ok(city);
   }

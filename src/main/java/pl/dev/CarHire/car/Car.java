@@ -49,7 +49,7 @@ public class Car {
     public City city;
 
     @Column(name = "Price_Per_Day")
-    public float price_per_day;
+    public float pricePerDay;
 
     @JsonManagedReference
     @OneToMany

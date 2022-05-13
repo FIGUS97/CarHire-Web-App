@@ -1,6 +1,7 @@
 package pl.dev.CarHire.hire;
 
 import org.apache.http.client.HttpResponseException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
@@ -42,6 +43,12 @@ public class CarHireService {
   @Autowired
   private CarRepository carRepository;
 
+  private final ModelMapper modelMapper;
+
+  public CarHireService() {
+    this.modelMapper = new ModelMapper();
+  }
+
   public List<CarHire> getAllCarHires() {
     return carHireRepository.findAll();
   }
@@ -68,15 +75,15 @@ public class CarHireService {
         .customer(customer)
         .car(car)
         .status(newCarHire.getStatus())
-        .number_days(newCarHire.getDays())
-        .amount(newCarHire.getPrice())
+        .days(newCarHire.getDays())
+        .price(newCarHire.getPrice())
         .build();
 
 
     CarHire savedCarHire = carHireRepository.save(carHire);
     car.getCarHires().add(savedCarHire);
 
-    CarHireInstanceResponse response = carHireToCarHireInstanceResponse(savedCarHire);
+    CarHireInstanceResponse response = modelMapper.map(savedCarHire, CarHireInstanceResponse.class);
 
     return response;
   }
@@ -88,15 +95,15 @@ public class CarHireService {
     CarHire updatedCarHire = CarHire.builder()
         .id(providedCarHire.getId())
         .status(providedCarHire.getStatus())
-        .number_days(providedCarHire.getDays())
-        .amount(providedCarHire.getPrice())
+        .days(providedCarHire.getDays())
+        .price(providedCarHire.getPrice())
         .car(currentCarHire.getCar())
         .customer(currentCarHire.getCustomer())
         .build();
 
     CarHire carHire = carHireRepository.save(updatedCarHire);
 
-    CarHireInstanceResponse response = carHireToCarHireInstanceResponse(updatedCarHire);
+    CarHireInstanceResponse response = modelMapper.map(carHire, CarHireInstanceResponse.class);
 
     return response;
   }
@@ -121,13 +128,13 @@ public class CarHireService {
             .model(hire.getCar().getModel())
             .status(hire.getCar().getStatus())
             .cityName(hire.getCar().getCity().getName())
-            .price(hire.getCar().getPrice_per_day())
+            .pricePerDay(hire.getCar().getPricePerDay())
             .build())
         .id(hire.getId())
         .status(hire.getStatus())
-        .price(hire.getAmount())
-        .days(hire.getNumber_days())
-        .user(UserInstanceResponse.builder()
+        .price(hire.getPrice())
+        .days(hire.getDays())
+        .customer(UserInstanceResponse.builder()
             .name_surname(hire.getCustomer().getName_surname())
             .build())
         .build();

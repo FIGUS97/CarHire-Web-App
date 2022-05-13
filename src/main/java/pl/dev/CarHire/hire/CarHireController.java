@@ -36,6 +36,7 @@ public class CarHireController {
         - TODO: Dodanie DTOs
         - TODO: Dodanie Security (token JWT)
         - TODO: Dodanie swaggera
+        - TODO: Przerobienie endpointów na biznesowe
     */
 
   public CarHireController(CarHireService carHireService) {

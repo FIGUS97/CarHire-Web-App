@@ -40,9 +40,9 @@
 --
 
 INSERT INTO City (ID_City, Name)
-VALUES(1,  'Warszawa');
+VALUES(101,  'Warszawa');
 INSERT INTO City (ID_City, Name)
-VALUES(2,  'Krakow');
+VALUES(102,  'Krakow');
 
 INSERT INTO Role (ID_Role, Name)
 VALUES(1, 'Employee');
@@ -50,16 +50,16 @@ INSERT INTO Role (ID_Role, Name)
 VALUES(2, 'Customer');
 
 INSERT INTO USER (ID_User, Name_Surname, ID_City, Responsibility, Age, Status, ID_Role, username, password )
-VALUES(101,  'James Walin', 1,'Renting cars', 32, 'ACTIVE', 1, 'james', 'james');
+VALUES(101,  'James Walin', 101,'Renting cars', 32, 'ACTIVE', 1, 'james', 'james');
 INSERT INTO USER (ID_User, Name_Surname, ID_City, Responsibility, Age, Status, ID_Role, username, password )
-VALUES(102,  'Matt Hacketton', 2,'Renting cars', 32, 'ACTIVE', 1, 'matt', 'matt');
+VALUES(102,  'Matt Hacketton', 102,'Renting cars', 32, 'ACTIVE', 1, 'matt', 'matt');
 
 INSERT INTO Car (ID_Car, Brand, Model, City, Price_Per_Day, Status )
-VALUES(120002,  'Opel', 'Adam',1, 90, 'Free');
+VALUES(120002,  'Opel', 'Adam',101, 90, 'Free');
 INSERT INTO Car (ID_Car, Brand, Model, City, Price_Per_Day, Status )
-VALUES(120003,  'Opel', 'Zafira',2, 120, 'Booked');
+VALUES(120003,  'Opel', 'Zafira',102, 120, 'Booked');
 
 INSERT INTO USER (ID_User, Name_Surname, ID_City, Responsibility, Age, Status, ID_Role, username, password )
-VALUES(103,  'Anna Walin', 1,'', 32, 'ACTIVE', 2, 'anna', 'anna');
+VALUES(103,  'Anna Walin', 101,'', 32, 'ACTIVE', 2, 'anna', 'anna');
 INSERT INTO USER (ID_User, Name_Surname, ID_City, Responsibility, Age, Status, ID_Role, username, password )
-VALUES(104,  'Roman Walin', 2,'', 32, 'ACTIVE', 2, 'roman', 'roman');
+VALUES(104,  'Roman Walin', 102,'', 32, 'ACTIVE', 2, 'roman', 'roman');

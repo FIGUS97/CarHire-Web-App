@@ -1,15 +1,19 @@
 package pl.dev.CarHire.city;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 import pl.dev.CarHire.car.Car;
 import pl.dev.CarHire.car.CarRepository;
+import pl.dev.CarHire.car.payload.CarInstanceResponse;
 import pl.dev.CarHire.city.payload.CityCreateRequest;
 import pl.dev.CarHire.city.payload.CityInstanceResponse;
 import pl.dev.CarHire.city.payload.CityUpdateRequest;
@@ -29,13 +33,34 @@ public class CityService {
   @Autowired
   private CarRepository carRepository;
 
-  public List<Car> getCarsForCity(String cityName) {
-    return carRepository.findAllByCityName(cityName);
+  private ModelMapper modelMapper;
+
+  public CityService() {
+    this.modelMapper = new ModelMapper();
   }
 
-  public List<City> findAllBy(Optional<String> cityName) {
-    return cityName.map(s -> Collections
-        .singletonList(cityRepository.findByName(s))).orElseGet(() -> cityRepository.findAll());
+  public List<CarInstanceResponse> getCarsForCity(String cityName) {
+    List<CarInstanceResponse> cars = carRepository
+        .findAllByCityName(cityName)
+        .stream()
+        .map(car -> modelMapper.map(car, CarInstanceResponse.class))
+        .collect(Collectors.toList());
+
+    return cars;
+  }
+
+  public List<CityInstanceResponse> findAllBy(Optional<String> cityName) {
+
+    List<City> cities = cityName.map(s ->
+            Collections.singletonList(cityRepository.findByName(s)))
+            .orElseGet(() -> cityRepository.findAll());
+
+    List<CityInstanceResponse> responses = cities
+        .stream()
+        .map(city -> modelMapper.map(city, CityInstanceResponse.class))
+        .collect(Collectors.toList());
+
+    return responses;
   }
 
   public City getCityById(Long id) {
@@ -49,10 +74,7 @@ public class CityService {
 
     City created = cityRepository.save(city);
 
-    CityInstanceResponse response = CityInstanceResponse.builder()
-        .id(created.getId())
-        .name(created.getName())
-        .build();
+    CityInstanceResponse response = modelMapper.map(city, CityInstanceResponse.class);
 
     return response;
   }
@@ -77,10 +99,7 @@ public class CityService {
 
     City updated = cityRepository.save(city);
 
-    CityInstanceResponse response = CityInstanceResponse.builder()
-        .id(updated.getId())
-        .name(updated.getName())
-        .build();
+    CityInstanceResponse response = modelMapper.map(city, CityInstanceResponse.class);
 
     return response;
   }

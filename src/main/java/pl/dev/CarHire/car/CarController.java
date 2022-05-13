@@ -35,6 +35,7 @@ public class CarController {
         - TODO: Obsługa błędów
         - TODO: Dodanie Security (token JWT)
         - TODO: Dodanie swaggera
+        - TODO: Przerobienie endpointów na biznesowe
     */
 
     public CarController(CarService carService) {
@@ -46,8 +47,8 @@ public class CarController {
     @ApiResponses(value =  {
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    public ResponseEntity<List<Car>> getAllCars(@RequestParam(value = "brand") Optional<String> brand, @RequestParam(value = "status") Optional<String> status) {
-        List<Car> response = carService.findBy(brand.orElse(null), status.orElse(null));
+    public ResponseEntity<List<CarInstanceResponse>> getAllCars(@RequestParam(value = "brand") Optional<String> brand, @RequestParam(value = "status") Optional<String> status) {
+        List<CarInstanceResponse> response = carService.findBy(brand.orElse(null), status.orElse(null));
         return ResponseEntity.ok(response);
     }
 

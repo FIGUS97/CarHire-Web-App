@@ -29,6 +29,10 @@ import pl.dev.CarHire.user.User;
 @AllArgsConstructor
 public class City {
 
+    /*
+    - TODO: Zarządzanie ID-kami żeby sie nie powtarzały (UUID)
+    */
+
     @Id
     @Column(name = "ID_CITY", nullable = false)
     @SequenceGenerator(name = "local_city",

@@ -31,11 +31,10 @@ public class UserController {
 
   private final UserService userService;
       /* TODOs:
-        - TODO: Implementacja endpointów
         - TODO: Obsługa błędów
-        - TODO: Dodanie DTOs
         - TODO: Dodanie Security (token JWT)
         - TODO: Dodanie swaggera
+        - TODO: Przerobienie endpointów na biznesowe
     */
 
   public UserController(UserService userService) {
