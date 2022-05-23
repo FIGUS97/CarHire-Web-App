@@ -13,7 +13,7 @@ import pl.dev.CarHire.user.payload.UserInstanceResponse;
 @AllArgsConstructor
 public class CarHireInstanceResponse {
 
-  private Long id;
+  private String id;
   private UserInstanceResponse customer;
   private CarInstanceResponse car;
   private String status;

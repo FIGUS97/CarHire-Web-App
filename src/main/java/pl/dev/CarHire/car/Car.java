@@ -3,6 +3,8 @@ package pl.dev.CarHire.car;
 import javax.persistence.*;
 import java.util.List;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -26,11 +28,9 @@ public class Car {
 
     @Id
     @Column(name = "ID_Car", nullable = false)
-    @SequenceGenerator(name = "local_car",
-        sequenceName = "db_GenName")
-    @GeneratedValue(strategy = GenerationType.AUTO,
-        generator="local_car")
-    public Long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    public String id;
 
     @NonNull
     @Column(name = "Brand")

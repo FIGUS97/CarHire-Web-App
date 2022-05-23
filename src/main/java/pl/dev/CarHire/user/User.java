@@ -10,6 +10,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.List;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -25,11 +27,9 @@ public class User {
 
     @Id
     @Column(name = "ID_User")
-    @SequenceGenerator(name = "local_user",
-        sequenceName = "db_GenName")
-    @GeneratedValue(strategy = GenerationType.AUTO,
-        generator="local_user")
-    public Long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    public String id;
 
     @JsonBackReference
     @ManyToOne

@@ -2,6 +2,8 @@ package pl.dev.CarHire.hire;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
@@ -20,11 +22,9 @@ import pl.dev.CarHire.user.User;
 public class CarHire {
     @Id
     @Column(name = "ID_Hire", nullable = false)
-    @SequenceGenerator(name = "local_carHire",
-        sequenceName = "db_GenName")
-    @GeneratedValue(strategy = GenerationType.AUTO,
-        generator="local_carHire")
-    public Long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    public String id;
 
     @JsonBackReference
     @ManyToOne

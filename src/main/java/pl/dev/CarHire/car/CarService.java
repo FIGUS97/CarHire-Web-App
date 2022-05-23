@@ -42,7 +42,7 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public Car getCarById(Long id) {
+    public Car getCarById(String id) {
         return carRepository.findById(id).get();
     }
 
@@ -96,7 +96,7 @@ public class CarService {
         return response;
     }
 
-    public DeleteResponse deleteCar(Long id) {
+    public DeleteResponse deleteCar(String id) {
         Car car = getCarById(id);
 
         carRepository.delete(car);

@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -35,11 +37,9 @@ public class City {
 
     @Id
     @Column(name = "ID_CITY", nullable = false)
-    @SequenceGenerator(name = "local_city",
-        sequenceName = "db_GenName")
-    @GeneratedValue(strategy = GenerationType.AUTO,
-        generator="local_city")
-    public Long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    public String id;
 
     @Column(name = "Name")
     public String name;

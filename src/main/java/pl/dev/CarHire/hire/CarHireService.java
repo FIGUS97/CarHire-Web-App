@@ -53,11 +53,11 @@ public class CarHireService {
     return carHireRepository.findAll();
   }
 
-  public CarHire getCarHireById(Long id) {
+  public CarHire getCarHireById(String id) {
     return carHireRepository.findById(id).get();
   }
 
-  public List<CarHireInstanceResponse> findBy(Long userId, Long carId, String status, Integer days, Float price) {
+  public List<CarHireInstanceResponse> findBy(String userId, String carId, String status, Integer days, Float price) {
 
     List<CarHire> hires = carHireRepository.findByAttributes(userId, carId, status, days, price);
 
@@ -108,7 +108,7 @@ public class CarHireService {
     return response;
   }
 
-  public DeleteResponse deleteCarHire(Long id) {
+  public DeleteResponse deleteCarHire(String id) {
     CarHire carHire = getCarHireById(id);
 
     //carHire.getCar().getCarHires().remove(carHire);

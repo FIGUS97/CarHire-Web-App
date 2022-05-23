@@ -59,7 +59,7 @@ public class CityController {
   }
 
   @GetMapping("/cities/{id}")
-  public ResponseEntity<City> getCityById( @PathVariable Long id) {
+  public ResponseEntity<City> getCityById( @PathVariable String id) {
     City city = cityService.getCityById(id);
     return ResponseEntity.ok(city);
   }
@@ -77,7 +77,7 @@ public class CityController {
   }
 
   @DeleteMapping("/cities/{id}")
-  public ResponseEntity<DeleteResponse> deleteCity(@PathVariable Long id) {
+  public ResponseEntity<DeleteResponse> deleteCity(@PathVariable String id) {
     DeleteResponse response = cityService.deleteCity(id);
     return ResponseEntity.ok(response);
   }

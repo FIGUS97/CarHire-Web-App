@@ -12,7 +12,7 @@ import pl.dev.CarHire.user.User;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, String> {
 
     @Query("SELECT c FROM User c WHERE "
         + "(:role is null or c.role = :role) and "

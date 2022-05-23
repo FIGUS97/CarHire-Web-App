@@ -66,7 +66,7 @@ public class UserController {
   }
 
   @GetMapping("/users/{id}")
-  public User getUserById(@PathVariable Long id) { return userService.getUserById(id); }
+  public User getUserById(@PathVariable String id) { return userService.getUserById(id); }
 
   @PostMapping("/users")
   public ResponseEntity<UserInstanceResponse> addUser(@RequestBody UserCreateRequest newUser) throws HttpResponseException {
@@ -81,7 +81,7 @@ public class UserController {
   }
 
   @DeleteMapping("/users/{id}")
-  public ResponseEntity<DeleteResponse> deleteCar(@PathVariable Long id) {
+  public ResponseEntity<DeleteResponse> deleteCar(@PathVariable String id) {
     DeleteResponse response = userService.deleteUser(id);
     return ResponseEntity.ok(response);
   }

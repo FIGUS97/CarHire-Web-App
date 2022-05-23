@@ -63,7 +63,7 @@ public class CityService {
     return responses;
   }
 
-  public City getCityById(Long id) {
+  public City getCityById(String id) {
     return cityRepository.findById(id).get();
   }
 
@@ -79,7 +79,7 @@ public class CityService {
     return response;
   }
 
-  public DeleteResponse deleteCity(Long id) {
+  public DeleteResponse deleteCity(String id) {
     City city = getCityById(id);
 
     cityRepository.delete(city);

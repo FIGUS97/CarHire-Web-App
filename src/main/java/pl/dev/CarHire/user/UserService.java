@@ -44,7 +44,7 @@ public class UserService {
     return userRepository.findAll();
   }
 
-  public User getUserById(Long id) {
+  public User getUserById(String id) {
     return userRepository.findById(id).get();
   }
 
@@ -103,7 +103,7 @@ public class UserService {
     return modelMapper.map(updatedUser, UserInstanceResponse.class);
   }
 
-  public DeleteResponse deleteUser(Long id) {
+  public DeleteResponse deleteUser(String id) {
     User user = getUserById(id);
 
     userRepository.delete(user);

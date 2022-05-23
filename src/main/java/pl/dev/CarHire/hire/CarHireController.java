@@ -49,8 +49,8 @@ public class CarHireController {
       @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
   })
   public ResponseEntity<List<CarHireInstanceResponse>> getAllCarHires(
-      @RequestParam(value = "userId", required = false) Optional<Long> userId,
-      @RequestParam(value = "carId", required = false) Optional<Long> carId,
+      @RequestParam(value = "userId", required = false) Optional<String> userId,
+      @RequestParam(value = "carId", required = false) Optional<String> carId,
       @RequestParam(value = "status", required = false) Optional<String> status,
       @RequestParam(value = "days", required = false) Optional<Integer> days,
       @RequestParam(value = "price", required = false) Optional<Float> price) {
@@ -65,7 +65,7 @@ public class CarHireController {
   }
 
   @GetMapping("/carHires/{id}")
-  public ResponseEntity<CarHire> getCarHireById( @PathVariable Long id) {
+  public ResponseEntity<CarHire> getCarHireById( @PathVariable String id) {
 
     CarHire response = carHireService.getCarHireById(id);
     return ResponseEntity.ok(response);
@@ -85,7 +85,7 @@ public class CarHireController {
   }
 
   @DeleteMapping("/carHires/{id}")
-  public ResponseEntity<DeleteResponse> deleteCarHire(@PathVariable Long id) {
+  public ResponseEntity<DeleteResponse> deleteCarHire(@PathVariable String id) {
     DeleteResponse response = carHireService.deleteCarHire(id);
     return ResponseEntity.ok(response);
   }

@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class DeleteResponse {
 
-  private Long id;
+  private String id;
   private String message;
 }

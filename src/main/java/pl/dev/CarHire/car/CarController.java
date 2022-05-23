@@ -53,7 +53,7 @@ public class CarController {
     }
 
     @GetMapping("/cars/{id}")
-    public ResponseEntity<Car> getCarById( @PathVariable Long id) {
+    public ResponseEntity<Car> getCarById( @PathVariable String id) {
         Car response = carService.getCarById(id);
         return ResponseEntity.ok(response);
     }
@@ -71,7 +71,7 @@ public class CarController {
     }
 
     @DeleteMapping("/cars/{id}")
-    public ResponseEntity<DeleteResponse> deleteCar(@PathVariable Long id) {
+    public ResponseEntity<DeleteResponse> deleteCar(@PathVariable String id) {
         DeleteResponse response = carService.deleteCar(id);
         return ResponseEntity.ok(response);
     }

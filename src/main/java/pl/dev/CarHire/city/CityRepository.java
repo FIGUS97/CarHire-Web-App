@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import pl.dev.CarHire.city.City;
 
 @Repository
-public interface CityRepository extends JpaRepository<City, Long> {
+public interface CityRepository extends JpaRepository<City, String> {
 
   City findByName(@Param("name") String name);
 }

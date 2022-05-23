@@ -22,7 +22,7 @@ public class Role {
     @Id
     @Column(name = "ID_Role")
     @GeneratedValue
-    public Long id_role;
+    public String id_role;
 
     @Column(name = "Name")
     public String name;
