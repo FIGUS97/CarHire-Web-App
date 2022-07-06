@@ -26,14 +26,13 @@ import pl.dev.CarHire.model.user.payload.UserInstanceResponse;
 import pl.dev.CarHire.model.user.payload.UserUpdateRequest;
 
 @RestController
-@RequestMapping("/api")
 public class UserController {
 
   private final UserService userService;
       /* TODOs:
         - TODO: Obsługa błędów
         - TODO: Dodanie Security (token JWT)
-        - TODO: Dodanie swaggera
+        - TODO: Opisy do swaggera
         - TODO: Przerobienie endpointów na biznesowe
     */
 

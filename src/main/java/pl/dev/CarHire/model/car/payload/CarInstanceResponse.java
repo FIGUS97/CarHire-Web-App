@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarInstanceResponse {
 
+  private String id;
   private String brand;
   private String model;
   private String status;

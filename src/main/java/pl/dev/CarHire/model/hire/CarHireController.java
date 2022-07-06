@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
 public class CarHireController {
 
   private final CarHireService carHireService;
@@ -35,7 +34,7 @@ public class CarHireController {
         - TODO: Obsługa błędów
         - TODO: Dodanie DTOs
         - TODO: Dodanie Security (token JWT)
-        - TODO: Dodanie swaggera
+        - TODO: Opisy do swaggera
         - TODO: Przerobienie endpointów na biznesowe
     */
 

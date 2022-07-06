@@ -28,7 +28,6 @@ import pl.dev.CarHire.model.city.payload.CityUpdateRequest;
 import pl.dev.CarHire.model.common.payload.DeleteResponse;
 
 @RestController
-@RequestMapping("/api")
 public class CityController {
   @Autowired
   private CityService cityService;
@@ -37,7 +36,7 @@ public class CityController {
         - TODO: Obsługa błędów
         - TODO: Dodanie DTOs
         - TODO: Dodanie Security (token JWT)
-        - TODO: Dodanie swaggera
+        - TODO: Opisy do swaggera
         - TODO: Przerobienie endpointów na biznesowe
     */
 

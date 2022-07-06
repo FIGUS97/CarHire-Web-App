@@ -11,46 +11,234 @@ servers:
   - url: 'https://localhost:6001/api'
 tags:
   - name: Car
-paths: 
-  /api/cars:
+
+paths:
+  /cars:
     get:
       tags:
         - Car
       summary: See all cars filtered.
       description: Asks database to list all cars of chosen brand or/and status of rental.
+      operationId: getCars
       parameters:
         - name: brand
+          in: query
           description: A brand of a car.
-          in: query
-          requied: false
           schema:
             type: string
+          allowEmptyValue: true
         - name: status
-          description: Sepcifies if the car is available, hidden or rented
           in: query
-          required: false
+          description: Sepcifies if the car is available, hidden or rented
           schema:
-            type: string
+            $ref: '#/components/schemas/Status'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResourceEntity'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ClientErrorInformation'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ClientErrorInformation'
-        '404':
-          description: Not Found
+          $ref: '#/components/responses/CarSuccess'
+        '4XX':
+          $ref: '#/components/responses/CarBadRequest'
+        '5XX':
+          $ref: '#/components/responses/CarInternalServerError'
+        default:
+          description: Unknown Error
 
-      
+    post:
+      tags:
+        - Car
+      summary: See all cars filtered.
+      description: Enables to insert new car to database.
+      operationId: addCar
+      parameters:
+        - name: brand
+          in: query
+          description: A brand of a car.
+          schema:
+            type: string
+          required: true
+        - name: model
+          in: query
+          description: Model of a car.
+          schema:
+            type: string
+          required: true
+        - name: cityName
+          in: query
+          description: Name of the city that the car is present in.
+          schema:
+            type: string
+          required: true
+        - name: pricePerDay
+          in: query
+          description: Cost of renting a car for a day.
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/CarSuccess'
+        '4XX':
+          $ref: '#/components/responses/CarBadRequest'
+        '5XX':
+          $ref: '#/components/responses/CarInternalServerError'
+        default:
+          description: Unknown Error
+    put:
+      tags:
+        - Car
+      summary: Update a car.
+      description: Enables to update a car in database.
+      operationId: updateCar
+      parameters:
+        - name: id
+          in: query
+          description: An ID of a car.
+          schema:
+            type: string
+          required: true
+        - name: brand
+          in: query
+          description: A brand of a car.
+          schema:
+            type: string
+          required: false
+        - name: model
+          in: query
+          description: Model of a car.
+          schema:
+            type: string
+          required: false
+        - name: cityName
+          in: query
+          description: Name of the city that the car is present in.
+          schema:
+            type: string
+          required: false
+        - name: pricePerDay
+          in: query
+          description: Cost of renting a car for a day.
+          schema:
+            type: string
+          required: false
+        - name: status
+          in: query
+          description: Sepcifies if the car is available, hidden or rented
+          schema:
+            $ref: '#/components/schemas/Status'
+          required: false
+      responses:
+        '200':
+          $ref: '#/components/responses/CarSuccess'
+        '4XX':
+          $ref: '#/components/responses/CarBadRequest'
+        '5XX':
+          $ref: '#/components/responses/CarInternalServerError'
+        default:
+          description: Unknown Error
+
+  /cars/{id}:
+    get:
+      tags:
+        - Car
+      summary: See car details by ID.
+      description: Enables to see all the details of a car.
+      operationId: getDistinctCar
+      parameters:
+        - name: id
+          in: path
+          description: An ID of a car.
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/CarSuccess'
+        '4XX':
+          $ref: '#/components/responses/CarBadRequest'
+        '5XX':
+          $ref: '#/components/responses/CarInternalServerError'
+        default:
+          description: Unknown Error
+
+    delete:
+      tags:
+        - Car
+      summary: Delete a Car from database.
+      description: Enables to delete a Car using ID.
+      operationId: deleteCar
+      parameters:
+        - name: id
+          in: path
+          description: An ID of a car.
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/CarSuccess'
+        '4XX':
+          $ref: '#/components/responses/CarBadRequest'
+        '5XX':
+          $ref: '#/components/responses/CarInternalServerError'
+        default:
+          description: Unknown Error
+
+
+components:
+  schemas:
+    Status:
+      type: string
+      enum:
+        - RENTED
+        - FREE
+        - SERVICE
+  responses:
+    CarSuccess:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              description: Represents a Car entry.
+              properties:
+                id:
+                  type: string
+                  description: ID of a car.
+                brand:
+                  type: string
+                  description: Brand name.
+                model:
+                  type: string
+                  description: Model of a car.
+                status:
+                  type: string
+                  description: Represents a status of a car. It can be RENTED, FREE or SERVICE.
+                cityName:
+                  type: string
+                  description: Name of the city that the car is at.
+                pricePerDay:
+                  type: number
+                  description: Cost of renting a car for a day.
+              example:
+                id: 9990
+                brand: Opel
+                model: Meriva
+                status: RENTED
+                cityName: Warszawa
+                pricePerDay: 90.1
+    CarBadRequest:
+      description: Bad Request
+    CarInternalServerError:
+      description: Internal Server Error
+  securitySchemes:
+    BasicAuthentication:
+      type: http
+      scheme: basic
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+
+security:
+  - BearerAuthentication: []
+

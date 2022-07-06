@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
 public class CarController {
 
     private final CarService carService;
@@ -34,7 +33,7 @@ public class CarController {
     /* TODOs:
         - TODO: Obsługa błędów
         - TODO: Dodanie Security (token JWT)
-        - TODO: Dodanie swaggera
+        - TODO: Opisy do swaggera
         - TODO: Przerobienie endpointów na biznesowe
     */
 
