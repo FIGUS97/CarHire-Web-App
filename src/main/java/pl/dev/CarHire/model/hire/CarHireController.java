@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,21 +29,16 @@ public class CarHireController {
 
   private final CarHireService carHireService;
 
-    /* TODOs:
-        - TODO: Obsługa błędów
-        - TODO: Dodanie DTOs
-        - TODO: Dodanie Security (token JWT)
-        - TODO: Opisy do swaggera
-        - TODO: Przerobienie endpointów na biznesowe
-    */
-
   public CarHireController(CarHireService carHireService) {
     this.carHireService = carHireService;
   }
 
   @GetMapping("/carHires")
-  @Operation(summary = "Getting all car hires", description = "Just getting all car hires")
+  @Operation(summary = "Getting all hires registered.", description = "Given the details like id of the user or car, and status, days, price, user is able to see hires on cars.")
   @ApiResponses(value =  {
+      @ApiResponse(responseCode = "200", description = "Object found and visible", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
       @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
   })
   public ResponseEntity<List<CarHireInstanceResponse>> getAllCarHires(
@@ -64,6 +58,13 @@ public class CarHireController {
   }
 
   @GetMapping("/carHires/{id}")
+  @Operation(summary = "Getting the registered hire.", description = "Given the id of the hire, user is able to see all hire details.")
+  @ApiResponses(value =  {
+      @ApiResponse(responseCode = "200", description = "Object found and visible", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+  })
   public ResponseEntity<CarHire> getCarHireById( @PathVariable String id) {
 
     CarHire response = carHireService.getCarHireById(id);
@@ -71,6 +72,13 @@ public class CarHireController {
   }
 
   @PostMapping("/carHires")
+  @Operation(summary = "Creating new hire.", description = "Given the details from DTO CarHireCreateRequest, user is able to register new hire.")
+  @ApiResponses(value =  {
+      @ApiResponse(responseCode = "200", description = "Object found and visible", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+  })
   public ResponseEntity<CarHireInstanceResponse> addCarHire(@RequestBody CarHireCreateRequest newCarHire) throws HttpResponseException {
 
     CarHireInstanceResponse response = carHireService.addCarHire(newCarHire);
@@ -78,12 +86,26 @@ public class CarHireController {
   }
 
   @PutMapping("/carHires")
+  @Operation(summary = "Editing the hire.", description = "Given the details from DTO CarHireUpdateRequest, user is able to edit the hire.")
+  @ApiResponses(value =  {
+      @ApiResponse(responseCode = "200", description = "Object found and visible", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+  })
   public ResponseEntity<CarHireInstanceResponse> editCarHire(@RequestBody CarHireUpdateRequest updatedCarHire) {
     CarHireInstanceResponse response = carHireService.updateCarHire(updatedCarHire);
     return ResponseEntity.ok(response);
   }
 
   @DeleteMapping("/carHires/{id}")
+  @Operation(summary = "Delete the hire.", description = "Option only for administrator.")
+  @ApiResponses(value =  {
+      @ApiResponse(responseCode = "200", description = "Object found and visible", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+      @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+  })
   public ResponseEntity<DeleteResponse> deleteCarHire(@PathVariable String id) {
     DeleteResponse response = carHireService.deleteCarHire(id);
     return ResponseEntity.ok(response);

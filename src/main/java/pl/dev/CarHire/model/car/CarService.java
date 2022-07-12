@@ -20,12 +20,6 @@ import java.util.stream.Collectors;
 @ApplicationScope
 public class CarService {
 
-    /*
-        - TODO: Test obsługi zależności w bazie danych
-        - TODO: Obsługa błędów http
-        - TODO: Mappery
-     */
-
     @Autowired
     private CarRepository carRepository;
 
@@ -47,16 +41,14 @@ public class CarService {
     }
 
     public List<CarInstanceResponse> findBy( String brand, String status) {
-        List<CarInstanceResponse> cars = carRepository
+        return carRepository
             .findByBrandAndStatus(brand, status)
             .stream()
             .map(car -> modelMapper.map(car, CarInstanceResponse.class))
             .collect(Collectors.toList());
-
-        return cars;
     }
 
-    public CarInstanceResponse addCar(CarCreateRequest newCar) throws HttpResponseException {
+    public CarInstanceResponse addCar(CarCreateRequest newCar) {
         City city = cityRepository.findByName(newCar.getCityName());
 
         Car car = Car.builder()
@@ -71,9 +63,7 @@ public class CarService {
         Car savedCar = carRepository.save(car);
         city.getCars().add(savedCar);
 
-        CarInstanceResponse response = modelMapper.map(car, CarInstanceResponse.class);
-
-        return response;
+        return modelMapper.map(car, CarInstanceResponse.class);
     }
 
     public CarInstanceResponse updateCar(CarUpdateRequest providedCar) {
@@ -91,9 +81,7 @@ public class CarService {
 
         Car car = carRepository.save(updatedCar);
 
-        CarInstanceResponse response = modelMapper.map(car, CarInstanceResponse.class);
-
-        return response;
+        return modelMapper.map(car, CarInstanceResponse.class);
     }
 
     public DeleteResponse deleteCar(String id) {
@@ -101,11 +89,9 @@ public class CarService {
 
         carRepository.delete(car);
 
-        DeleteResponse response = DeleteResponse.builder()
+        return DeleteResponse.builder()
             .id(id)
             .message("Car deleted.")
             .build();
-
-        return response;
     }
 }

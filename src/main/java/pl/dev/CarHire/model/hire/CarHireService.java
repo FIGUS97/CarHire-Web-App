@@ -19,17 +19,11 @@ import pl.dev.CarHire.model.user.payload.UserInstanceResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @ApplicationScope
 public class CarHireService {
-
-    /*
-        - TODO: Test obsługi zależności w bazie danych
-        - TODO: Obsługa błędów http
-        - TODO: Mappery
-
-     */
 
   @Autowired
   private CarHireRepository carHireRepository;
@@ -62,12 +56,12 @@ public class CarHireService {
     List<CarHire> hires = carHireRepository.findByAttributes(userId, carId, status, days, price);
 
     List<CarHireInstanceResponse> responses = new ArrayList<>();
-    hires.forEach(hire -> responses.add(carHireToCarHireInstanceResponse(hire)));
+    hires.forEach(hire -> responses.add(modelMapper.map(hire, CarHireInstanceResponse.class)));
 
     return responses;
   }
 
-  public CarHireInstanceResponse addCarHire(CarHireCreateRequest newCarHire) throws HttpResponseException {
+  public CarHireInstanceResponse addCarHire(CarHireCreateRequest newCarHire) {
     User customer = userRepository.getById(newCarHire.getUserId());
     Car car = carRepository.getById(newCarHire.getCarId());
 
@@ -83,9 +77,7 @@ public class CarHireService {
     CarHire savedCarHire = carHireRepository.save(carHire);
     car.getCarHires().add(savedCarHire);
 
-    CarHireInstanceResponse response = modelMapper.map(savedCarHire, CarHireInstanceResponse.class);
-
-    return response;
+    return modelMapper.map(savedCarHire, CarHireInstanceResponse.class);
   }
 
   public CarHireInstanceResponse updateCarHire(CarHireUpdateRequest providedCarHire) {
@@ -103,26 +95,22 @@ public class CarHireService {
 
     CarHire carHire = carHireRepository.save(updatedCarHire);
 
-    CarHireInstanceResponse response = modelMapper.map(carHire, CarHireInstanceResponse.class);
-
-    return response;
+    return modelMapper.map(carHire, CarHireInstanceResponse.class);
   }
 
   public DeleteResponse deleteCarHire(String id) {
     CarHire carHire = getCarHireById(id);
 
-    //carHire.getCar().getCarHires().remove(carHire);
     carHireRepository.delete(carHire);
 
-    DeleteResponse response = DeleteResponse.builder()
+    return DeleteResponse.builder()
         .id(id)
         .message("Car hire deleted.")
         .build();
-    return response;
   }
 
   private CarHireInstanceResponse carHireToCarHireInstanceResponse (CarHire hire) {
-    CarHireInstanceResponse response = CarHireInstanceResponse.builder()
+    return CarHireInstanceResponse.builder()
         .car(CarInstanceResponse.builder()
             .brand(hire.getCar().getBrand())
             .model(hire.getCar().getModel())
@@ -138,6 +126,5 @@ public class CarHireService {
             .name_surname(hire.getCustomer().getName_surname())
             .build())
         .build();
-    return response;
   }
 }

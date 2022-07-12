@@ -20,10 +20,6 @@ import pl.dev.CarHire.model.common.payload.DeleteResponse;
 @Service
 @ApplicationScope
 public class CityService {
-      /*
-        - TODO: Obsługa błędów http
-        - TODO: Mappery
-     */
 
   @Autowired
   private CityRepository cityRepository;
@@ -38,13 +34,11 @@ public class CityService {
   }
 
   public List<CarInstanceResponse> getCarsForCity(String cityName) {
-    List<CarInstanceResponse> cars = carRepository
+    return carRepository
         .findAllByCityName(cityName)
         .stream()
         .map(car -> modelMapper.map(car, CarInstanceResponse.class))
         .collect(Collectors.toList());
-
-    return cars;
   }
 
   public List<CityInstanceResponse> findAllBy(Optional<String> cityName) {
@@ -53,12 +47,10 @@ public class CityService {
             Collections.singletonList(cityRepository.findByName(s)))
             .orElseGet(() -> cityRepository.findAll());
 
-    List<CityInstanceResponse> responses = cities
+    return cities
         .stream()
         .map(city -> modelMapper.map(city, CityInstanceResponse.class))
         .collect(Collectors.toList());
-
-    return responses;
   }
 
   public City getCityById(String id) {
@@ -72,9 +64,7 @@ public class CityService {
 
     City created = cityRepository.save(city);
 
-    CityInstanceResponse response = modelMapper.map(city, CityInstanceResponse.class);
-
-    return response;
+    return modelMapper.map(created, CityInstanceResponse.class);
   }
 
   public DeleteResponse deleteCity(String id) {
@@ -82,11 +72,10 @@ public class CityService {
 
     cityRepository.delete(city);
 
-    DeleteResponse response = DeleteResponse.builder()
+    return DeleteResponse.builder()
         .id(id)
         .message("City deleted.")
         .build();
-    return response;
   }
 
   public CityInstanceResponse updateCity(CityUpdateRequest updatedCity) {
@@ -97,8 +86,6 @@ public class CityService {
 
     City updated = cityRepository.save(city);
 
-    CityInstanceResponse response = modelMapper.map(city, CityInstanceResponse.class);
-
-    return response;
+    return modelMapper.map(updated, CityInstanceResponse.class);
   }
 }

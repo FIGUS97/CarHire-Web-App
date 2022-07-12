@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,12 +28,6 @@ import pl.dev.CarHire.model.user.payload.UserUpdateRequest;
 public class UserController {
 
   private final UserService userService;
-      /* TODOs:
-        - TODO: Obsługa błędów
-        - TODO: Dodanie Security (token JWT)
-        - TODO: Opisy do swaggera
-        - TODO: Przerobienie endpointów na biznesowe
-    */
 
   public UserController(UserService userService) {
     this.userService = userService;

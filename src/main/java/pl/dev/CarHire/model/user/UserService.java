@@ -20,11 +20,6 @@ import pl.dev.CarHire.model.user.payload.UserUpdateRequest;
 @Service
 public class UserService {
 
-        /*
-        - TODO: Obsługa błędów http
-        - TODO: Mappery
-     */
-
   @Autowired
   private UserRepository userRepository;
 
@@ -58,7 +53,7 @@ public class UserService {
     return responses;
   }
 
-  public UserInstanceResponse addUser(UserCreateRequest newUser) throws HttpResponseException {
+  public UserInstanceResponse addUser(UserCreateRequest newUser) {
     City city = cityRepository.findByName(newUser.getCityName());
     Role role = roleRepository.findByName(newUser.getRoleName());
 
@@ -108,18 +103,16 @@ public class UserService {
 
     userRepository.delete(user);
 
-    DeleteResponse response = DeleteResponse.builder()
+    return DeleteResponse.builder()
         .id(id)
         .message("User deleted")
         .build();
-
-    return response;
   }
 
   private UserInstanceResponse userToUserInstanceResponse(User user) {
-    UserInstanceResponse response = UserInstanceResponse.builder()
+    return UserInstanceResponse.builder()
         .name_surname(user.getName_surname())
+        .id(user.getId())
         .build();
-    return response;
   }
 }
