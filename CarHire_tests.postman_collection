@@ -1,0 +1,892 @@
+{
+	"info": {
+		"_postman_id": "e16b3d63-5338-46d4-9f00-55609f62c97a",
+		"name": "Moje-CarHire",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Car",
+			"item": [
+				{
+					"name": "CarHire-getAllCars (Optional params)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    let carAdded;\r",
+									"    _.each(responseJson, (car)=>{\r",
+									"        if(car.id === environment['carID']) {\r",
+									"            testPass = true;\r",
+									"            pm.expect(car.brand).to.eql('Toyota');\r",
+									"            pm.expect(car.model).to.eql('Corolla');\r",
+									"            pm.expect(car.status).to.eql('Passive');\r",
+									"            pm.expect(car.cityName).to.eql('Krakow');\r",
+									"            pm.expect(car.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"            pm.expect(car.pricePerDay).to.eql(140.0);\r",
+									"        }\r",
+									"    })\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"carID not visible in getAllCars.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:6001/api/cars",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars"
+							],
+							"query": [
+								{
+									"key": "brand",
+									"value": "Toyota",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Booked",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "CarHire-getAllCars (Optional params)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:6001/api/cars",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "6001",
+									"path": [
+										"api",
+										"cars"
+									],
+									"query": [
+										{
+											"key": "brand",
+											"value": "Toyota",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "Booked",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 11 May 2022 20:25:28 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 120002,\n        \"brand\": \"Opel\",\n        \"model\": \"Adam\",\n        \"status\": \"Free\",\n        \"price_per_day\": 90,\n        \"carHires\": []\n    },\n    {\n        \"id\": 120003,\n        \"brand\": \"Opel\",\n        \"model\": \"Zafira\",\n        \"status\": \"Booked\",\n        \"price_per_day\": 120,\n        \"carHires\": []\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "CarHire-getCarById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['carID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.brand).to.eql('Toyota');\r",
+									"        pm.expect(responseJson.model).to.eql('Corolla');\r",
+									"        pm.expect(responseJson.status).to.eql('Passive');\r",
+									"        pm.expect(responseJson.cityName).to.eql('Krakow');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"        pm.expect(responseJson.pricePerDay).to.eql(140.0);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"carID not visible in getCarById.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/cars/{{carID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars",
+								"{{carID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getCarsByCityName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    let carAdded;\r",
+									"    _.each(responseJson, (car)=>{\r",
+									"        if(car.id === environment['carID']) {\r",
+									"            testPass = true;\r",
+									"            pm.expect(car.brand).to.eql('Toyota');\r",
+									"            pm.expect(car.model).to.eql('Corolla');\r",
+									"            pm.expect(car.status).to.eql('Passive');\r",
+									"            pm.expect(car.cityName).to.eql('Krakow');\r",
+									"            pm.expect(car.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"            pm.expect(car.pricePerDay).to.eql(140.0);\r",
+									"        }\r",
+									"    })\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"carID not visible in getAllCars.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/{{carCityName}}/cars",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"{{carCityName}}",
+								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-addCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.brand).to.eql('Toyota');\r",
+									"    pm.expect(responseJson.model).to.eql('Corolla');\r",
+									"    pm.expect(responseJson.status).to.eql('Passive');\r",
+									"    pm.expect(responseJson.cityName).to.eql('Krakow');\r",
+									"    pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    pm.expect(responseJson.pricePerDay).to.eql(140.0);\r",
+									"});\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"carID\", pm.response.json().id);\r",
+									"postman.setEnvironmentVariable(\"carCityName\", pm.response.json().cityName);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"Toyota\",\r\n    \"model\": \"Corolla\",\r\n    \"status\": \"Passive\",\r\n    \"cityName\": \"Krakow\",\r\n    \"price\": 140.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cars/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-deleteCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['carID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.message).to.eql('Car deleted.');\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"Car delete error.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cars/{{carID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars",
+								"{{carID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-editCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.pricePerDay === 150.0) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.brand).to.eql('Toyota');\r",
+									"        pm.expect(responseJson.model).to.eql('Corolla');\r",
+									"        pm.expect(responseJson.status).to.eql('Passive');\r",
+									"        //pm.expect(responseJson.cityName).to.eql('Krakow');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"Car not edited.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{carID}}\",\r\n    \"brand\": \"Toyota\",\r\n    \"model\": \"Corolla\",\r\n    \"status\": \"Passive\",\r\n    \"cityId\": \"101\",\r\n    \"price\": 150.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cars",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "City",
+			"item": [
+				{
+					"name": "CarHire-getAllCities (Optional params)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/cities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Warszawa",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getCityById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/cities/102",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities",
+								"102"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-addCity",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Szczecin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cities/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-deleteCity",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cities/fe494656-6e01-4c02-9380-7a765114e624",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities",
+								"fe494656-6e01-4c02-9380-7a765114e624"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-editCity",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"52\",\r\n    \"name\": \"Toruń\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "CarHire-getAllUsers (Optional params)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "Customer",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "Warszawa",
+									"disabled": true
+								},
+								{
+									"key": "name_surname",
+									"value": "Matt",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "ACTIVE",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "xxx@wp.pl",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "james",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getUserById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/users/101",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users",
+								"101"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-addUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roleName\": \"Administrator\",\r\n    \"cityName\": \"Warszawa\",\r\n    \"responsibility\": \"Zarządzanie systemami\",\r\n    \"name\": \"Michał\",\r\n    \"surname\": \"Sen\",\r\n    \"age\": \"32\",\r\n    \"status\": \"ACTIVE\",\r\n    \"email\": \"xxx@wp.pl\",\r\n    \"username\": \"michal\",\r\n    \"password\": \"michal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-deleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/users/101",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users",
+								"101"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-editUser",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"roleName\": \"Administrator\",\r\n    \"cityName\": \"Warszawa\",\r\n    \"responsibility\": \"Zarządzanie systemami\",\r\n    \"name\": \"Michał\",\r\n    \"surname\": \"Sen\",\r\n    \"age\": \"52\",\r\n    \"status\": \"ACTIVE\",\r\n    \"email\": \"xxx@wp.pl\",\r\n    \"username\": \"michal\",\r\n    \"password\": \"michal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CarHire",
+			"item": [
+				{
+					"name": "CarHire-getAllCarHires (Optional params)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/carHires",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "101",
+									"disabled": true
+								},
+								{
+									"key": "carId",
+									"value": "Booked",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Passive",
+									"disabled": true
+								},
+								{
+									"key": "days",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getCarHireById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/carHires/eaf1cbf7-d3ff-41fc-b6b5-88576cf39112",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires",
+								"eaf1cbf7-d3ff-41fc-b6b5-88576cf39112"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-addCarHire",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"102\",\r\n    \"carId\": \"120003\",\r\n    \"status\": \"Passive\",\r\n    \"cityId\": \"2\",\r\n    \"price\": 140.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/carHires/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-deleteCarHire",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/carHires/152",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires",
+								"152"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-editCarHire",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"id\": 152,\r\n        \"status\": \"Active\",\r\n        \"days\": 3,\r\n        \"price\": 140.0\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/carHires",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
