@@ -65,9 +65,9 @@ public class CarHireController {
       @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
       @ApiResponse(responseCode = "404", description = "Not found", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
   })
-  public ResponseEntity<CarHire> getCarHireById( @PathVariable String id) {
+  public ResponseEntity<CarHireInstanceResponse> getCarHireById( @PathVariable String id) {
 
-    CarHire response = carHireService.getCarHireById(id);
+    CarHireInstanceResponse response = carHireService.getCarHireById(id);
     return ResponseEntity.ok(response);
   }
 

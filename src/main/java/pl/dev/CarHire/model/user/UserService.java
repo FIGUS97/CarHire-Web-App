@@ -3,16 +3,17 @@ package pl.dev.CarHire.model.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.client.HttpResponseException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pl.dev.CarHire.model.city.City;
+import pl.dev.CarHire.model.city.exception.NoSuchCityException;
 import pl.dev.CarHire.model.common.payload.DeleteResponse;
 import pl.dev.CarHire.model.city.CityRepository;
 import pl.dev.CarHire.model.role.RoleRepository;
 import pl.dev.CarHire.model.role.Role;
+import pl.dev.CarHire.model.user.exception.UserNotFoundException;
 import pl.dev.CarHire.model.user.payload.UserCreateRequest;
 import pl.dev.CarHire.model.user.payload.UserInstanceResponse;
 import pl.dev.CarHire.model.user.payload.UserUpdateRequest;
@@ -39,22 +40,30 @@ public class UserService {
     return userRepository.findAll();
   }
 
-  public User getUserById(String id) {
-    return userRepository.findById(id).get();
+  public User getUserById(String id) throws UserNotFoundException {
+    return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
   }
 
-  public List<UserInstanceResponse> findBy(String role, String city, String nameSurname, String status, String email, String username) {
+  public List<UserInstanceResponse> findBy(String role, String cityName, String nameSurname, String status, String email, String username)
+      throws NoSuchCityException {
     List<UserInstanceResponse> responses = new ArrayList<>();
 
-    List<User> users = userRepository.findByAttributes(roleRepository.findByName(role), cityRepository.findByName(city), nameSurname, status, email, username);
+
+    City citySearched = null;
+    if(cityName != null) {
+      citySearched = cityRepository.findByName(cityName).orElseThrow(() -> new NoSuchCityException(cityName));
+    }
+
+    List<User> users = userRepository.findByAttributes(roleRepository.findByName(role), citySearched,
+        nameSurname, status, email, username);
 
     users.forEach(user -> responses.add(userToUserInstanceResponse(user)));
 
     return responses;
   }
 
-  public UserInstanceResponse addUser(UserCreateRequest newUser) {
-    City city = cityRepository.findByName(newUser.getCityName());
+  public UserInstanceResponse addUser(UserCreateRequest newUser) throws NoSuchCityException {
+    City city = cityRepository.findByName(newUser.getCityName()).orElseThrow(() -> new NoSuchCityException(newUser.getCityName()));
     Role role = roleRepository.findByName(newUser.getRoleName());
 
     User user = User.builder()
@@ -75,9 +84,9 @@ public class UserService {
     return modelMapper.map(savedUser, UserInstanceResponse.class);
   }
 
-  public UserInstanceResponse updateUser(UserUpdateRequest providedUser) {
+  public UserInstanceResponse updateUser(UserUpdateRequest providedUser) throws NoSuchCityException {
 
-    City city = cityRepository.findByName(providedUser.getCityName());
+    City city = cityRepository.findByName(providedUser.getCityName()).orElseThrow(() -> new NoSuchCityException(providedUser.getCityName()));
     Role role = roleRepository.findByName(providedUser.getRoleName());
 
     User user = User.builder()
@@ -98,7 +107,7 @@ public class UserService {
     return modelMapper.map(updatedUser, UserInstanceResponse.class);
   }
 
-  public DeleteResponse deleteUser(String id) {
+  public DeleteResponse deleteUser(String id) throws UserNotFoundException {
     User user = getUserById(id);
 
     userRepository.delete(user);

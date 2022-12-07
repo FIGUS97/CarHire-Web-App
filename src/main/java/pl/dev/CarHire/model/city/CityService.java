@@ -12,6 +12,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 
 import pl.dev.CarHire.model.car.CarRepository;
 import pl.dev.CarHire.model.car.payload.CarInstanceResponse;
+import pl.dev.CarHire.model.city.exception.NoSuchCityException;
 import pl.dev.CarHire.model.city.payload.CityCreateRequest;
 import pl.dev.CarHire.model.city.payload.CityInstanceResponse;
 import pl.dev.CarHire.model.city.payload.CityUpdateRequest;
@@ -44,8 +45,8 @@ public class CityService {
   public List<CityInstanceResponse> findAllBy(Optional<String> cityName) {
 
     List<City> cities = cityName.map(s ->
-            Collections.singletonList(cityRepository.findByName(s)))
-            .orElseGet(() -> cityRepository.findAll());
+            Collections.singletonList(cityRepository.findByName(s).orElseThrow(() -> new NoSuchCityException(s))))
+            .orElseGet(cityRepository::findAll);
 
     return cities
         .stream()

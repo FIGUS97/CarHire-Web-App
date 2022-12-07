@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 
+import pl.dev.CarHire.model.car.exception.NoSuchCarException;
+import pl.dev.CarHire.model.city.exception.NoSuchCityException;
 import pl.dev.CarHire.model.common.payload.DeleteResponse;
 import pl.dev.CarHire.model.car.payload.CarInstanceResponse;
 import pl.dev.CarHire.model.city.City;
@@ -36,8 +38,8 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public Car getCarById(String id) {
-        return carRepository.findById(id).get();
+    public Car getCarById(String id) throws NoSuchCarException {
+        return carRepository.findById(id).orElseThrow(() -> new NoSuchCarException(id));
     }
 
     public List<CarInstanceResponse> findBy( String brand, String status) {
@@ -48,8 +50,8 @@ public class CarService {
             .collect(Collectors.toList());
     }
 
-    public CarInstanceResponse addCar(CarCreateRequest newCar) {
-        City city = cityRepository.findByName(newCar.getCityName());
+    public CarInstanceResponse addCar(CarCreateRequest newCar) throws NoSuchCityException {
+        City city = cityRepository.findByName(newCar.getCityName()).orElseThrow(() -> new NoSuchCityException(newCar.getCityName()));
 
         Car car = Car.builder()
             .brand(newCar.getBrand())
@@ -84,7 +86,7 @@ public class CarService {
         return modelMapper.map(car, CarInstanceResponse.class);
     }
 
-    public DeleteResponse deleteCar(String id) {
+    public DeleteResponse deleteCar(String id) throws NoSuchCarException {
         Car car = getCarById(id);
 
         carRepository.delete(car);

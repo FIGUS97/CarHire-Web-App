@@ -47,8 +47,9 @@ public class CarHireService {
     return carHireRepository.findAll();
   }
 
-  public CarHire getCarHireById(String id) {
-    return carHireRepository.findById(id).get();
+  public CarHireInstanceResponse getCarHireById(String id) {
+    CarHire response = carHireRepository.findById(id).get();
+    return carHireToCarHireInstanceResponse(response);
   }
 
   public List<CarHireInstanceResponse> findBy(String userId, String carId, String status, Integer days, Float price) {
@@ -99,7 +100,7 @@ public class CarHireService {
   }
 
   public DeleteResponse deleteCarHire(String id) {
-    CarHire carHire = getCarHireById(id);
+    CarHire carHire = carHireRepository.findById(id).get();
 
     carHireRepository.delete(carHire);
 

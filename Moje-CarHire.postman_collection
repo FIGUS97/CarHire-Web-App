@@ -1,0 +1,1290 @@
+{
+	"info": {
+		"_postman_id": "e16b3d63-5338-46d4-9f00-55609f62c97a",
+		"name": "Moje-CarHire",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Car",
+			"item": [
+				{
+					"name": "CarHire-addCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.brand).to.eql('Toyota');\r",
+									"    pm.expect(responseJson.model).to.eql('Corolla');\r",
+									"    pm.expect(responseJson.status).to.eql('Passive');\r",
+									"    pm.expect(responseJson.cityName).to.eql('Warszawa');\r",
+									"    pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    pm.expect(responseJson.pricePerDay).to.eql(140.0);\r",
+									"});\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"carID\", pm.response.json().id);\r",
+									"postman.setEnvironmentVariable(\"carCityName\", pm.response.json().cityName);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"Toyota\",\r\n    \"model\": \"Corolla\",\r\n    \"status\": \"Passive\",\r\n    \"cityName\": \"Warszawa\",\r\n    \"price\": 140.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cars/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-editCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.pricePerDay === 150.0) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.brand).to.eql('Toyota');\r",
+									"        pm.expect(responseJson.model).to.eql('Corolla');\r",
+									"        pm.expect(responseJson.status).to.eql('Passive');\r",
+									"        //pm.expect(responseJson.cityName).to.eql('Krakow');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"Car not edited.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{carID}}\",\r\n    \"brand\": \"Toyota\",\r\n    \"model\": \"Corolla\",\r\n    \"status\": \"Passive\",\r\n    \"cityId\": \"101\",\r\n    \"price\": 150.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cars",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getAllCars (Optional params)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    let carAdded;\r",
+									"    _.each(responseJson, (car)=>{\r",
+									"        if(car.id === environment['carID']) {\r",
+									"            testPass = true;\r",
+									"            pm.expect(car.brand).to.eql('Toyota');\r",
+									"            pm.expect(car.model).to.eql('Corolla');\r",
+									"            pm.expect(car.status).to.eql('Passive');\r",
+									"            pm.expect(car.cityName).to.eql('Warszawa');\r",
+									"            pm.expect(car.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"            pm.expect(car.pricePerDay).to.eql(150.0);\r",
+									"        }\r",
+									"    })\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"carID not visible in getAllCars.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:6001/api/cars",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars"
+							],
+							"query": [
+								{
+									"key": "brand",
+									"value": "Toyota",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Booked",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "CarHire-getAllCars (Optional params)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:6001/api/cars",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "6001",
+									"path": [
+										"api",
+										"cars"
+									],
+									"query": [
+										{
+											"key": "brand",
+											"value": "Toyota",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "Booked",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 11 May 2022 20:25:28 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 120002,\n        \"brand\": \"Opel\",\n        \"model\": \"Adam\",\n        \"status\": \"Free\",\n        \"price_per_day\": 90,\n        \"carHires\": []\n    },\n    {\n        \"id\": 120003,\n        \"brand\": \"Opel\",\n        \"model\": \"Zafira\",\n        \"status\": \"Booked\",\n        \"price_per_day\": 120,\n        \"carHires\": []\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "CarHire-getCarById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['carID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.brand).to.eql('Toyota');\r",
+									"        pm.expect(responseJson.model).to.eql('Corolla');\r",
+									"        pm.expect(responseJson.status).to.eql('Passive');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"        pm.expect(responseJson.pricePerDay).to.eql(150.0);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"carID not visible in getCarById.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/cars/{{carID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars",
+								"{{carID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getCarsByCityName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    let carAdded;\r",
+									"    _.each(responseJson, (car)=>{\r",
+									"        if(car.id === environment['carID']) {\r",
+									"            testPass = true;\r",
+									"            pm.expect(car.brand).to.eql('Toyota');\r",
+									"            pm.expect(car.model).to.eql('Corolla');\r",
+									"            pm.expect(car.status).to.eql('Passive');\r",
+									"            pm.expect(car.cityName).to.eql('Warszawa');\r",
+									"            pm.expect(car.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"            pm.expect(car.pricePerDay).to.eql(150.0);\r",
+									"        }\r",
+									"    })\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"carID not visible in getAllCars.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/{{carCityName}}/cars",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"{{carCityName}}",
+								"cars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-deleteCar",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['carID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.message).to.eql('Car deleted.');\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"Car delete error.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cars/{{carID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cars",
+								"{{carID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "City",
+			"item": [
+				{
+					"name": "CarHire-addCity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.name).to.eql('Szczecin');\r",
+									"    pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"});\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"cityID\", pm.response.json().id);\r",
+									"postman.setEnvironmentVariable(\"cityName\", pm.response.json().name);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Szczecin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cities/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getAllCities (Optional params)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    let Added;\r",
+									"    _.each(responseJson, (city)=>{\r",
+									"        if(city.id === environment['cityID']) {\r",
+									"            testPass = true;\r",
+									"            pm.expect(city.name).to.eql('Szczecin');\r",
+									"            pm.expect(city.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"        }\r",
+									"    })\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"cityID not visible in getAllCities.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/cities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Warszawa",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getCityById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['cityID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.name).to.eql('Szczecin');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"cityID not visible in getCityById.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/cities/{{cityID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities",
+								"{{cityID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-editCity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['cityID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.name).to.eql('Toruń');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"City not edited.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{cityID}}\",\r\n    \"name\": \"Toruń\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-deleteCity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['cityID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.message).to.eql('City deleted.');\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"City delete error.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/cities/{{cityID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"cities",
+								"{{cityID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "CarHire-addUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.name_surname).to.eql('Michał Sen');\r",
+									"    pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"});\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"userID\", pm.response.json().id);\r",
+									"postman.setEnvironmentVariable(\"user_name_surname\", pm.response.json().name_surname);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roleName\": \"Administrator\",\r\n    \"cityName\": \"Warszawa\",\r\n    \"responsibility\": \"Zarządzanie systemami\",\r\n    \"name\": \"Michał\",\r\n    \"surname\": \"Sen\",\r\n    \"age\": \"32\",\r\n    \"status\": \"ACTIVE\",\r\n    \"email\": \"xxx@wp.pl\",\r\n    \"username\": \"michal\",\r\n    \"password\": \"michal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getAllUsers (Optional params)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    _.each(responseJson, (user)=>{\r",
+									"        if(user.id === environment['userID']) {\r",
+									"            testPass = true;\r",
+									"            pm.expect(user.name_surname).to.eql('Michał Sen');\r",
+									"            pm.expect(user.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"        }\r",
+									"    })\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"userID not visible in getAllUsers.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "Customer",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "Warszawa",
+									"disabled": true
+								},
+								{
+									"key": "name_surname",
+									"value": "Matt",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "ACTIVE",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "xxx@wp.pl",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "james",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-editUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['userID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.name_surname).to.eql('Michał Sen');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"User not edited.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{userID}}\",\r\n    \"roleName\": \"Administrator\",\r\n    \"cityName\": \"Warszawa\",\r\n    \"responsibility\": \"Zarządzanie systemami\",\r\n    \"name\": \"Michał\",\r\n    \"surname\": \"Sen\",\r\n    \"age\": \"52\",\r\n    \"status\": \"ACTIVE\",\r\n    \"email\": \"xxx@wp.pl\",\r\n    \"username\": \"michal\",\r\n    \"password\": \"michal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getUserById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['userID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.responsibility).to.eql('Zarządzanie systemami');\r",
+									"        pm.expect(responseJson.name_surname).to.eql('Michał Sen');\r",
+									"        pm.expect(responseJson.age).to.eql('52');\r",
+									"        pm.expect(responseJson.status).to.eql('ACTIVE');\r",
+									"        pm.expect(responseJson.email).to.eql('xxx@wp.pl');\r",
+									"        pm.expect(responseJson.username).to.eql('michal');\r",
+									"        pm.expect(responseJson.password).to.eql('michal');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"userID not visible in getUserById.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/users/{{userID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users",
+								"{{userID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-deleteUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['userID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.message).to.eql('User deleted');\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"User delete error.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/users/{{userID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"users",
+								"{{userID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CarHire",
+			"item": [
+				{
+					"name": "CarHire-addCarHire",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.customer.id).to.eql('102');\r",
+									"    pm.expect(responseJson.car.id).to.eql('120003');\r",
+									"    pm.expect(responseJson.status).to.eql('Passive');\r",
+									"    pm.expect(responseJson.days).to.eql(0);\r",
+									"    pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    pm.expect(responseJson.price).to.eql(140.0);\r",
+									"});\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"carHireID\", pm.response.json().id);\r",
+									"postman.setEnvironmentVariable(\"carHireCustomerID\", pm.response.json().customer.id);\r",
+									"postman.setEnvironmentVariable(\"carHireCarID\", pm.response.json().car.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"102\",\r\n    \"carId\": \"120003\",\r\n    \"status\": \"Passive\",\r\n    \"cityId\": \"2\",\r\n    \"price\": 140.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/carHires/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getAllCarHires (Optional params)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    _.each(responseJson, (carHire)=>{\r",
+									"        if(carHire.id === environment['carHireID']) {\r",
+									"            testPass = true;\r",
+									"            pm.expect(carHire.car.id).to.eql(environment['carHireCarID']);\r",
+									"            pm.expect(carHire.customer.id).to.eql(environment['carHireCustomerID']);\r",
+									"            pm.expect(carHire.status).to.eql('Passive');\r",
+									"            pm.expect(carHire.days).to.eql(0);\r",
+									"            pm.expect(carHire.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"            pm.expect(carHire.price).to.eql(140.0);\r",
+									"        }\r",
+									"    })\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"carHireID not visible in getAllUsers.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/carHires",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-editCarHire",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['carHireID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.customer.id).to.eql('102');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"        pm.expect(responseJson.car.id).to.eql('120003');\r",
+									"        pm.expect(responseJson.status).to.eql('Active');\r",
+									"        pm.expect(responseJson.days).to.eql(3);\r",
+									"        pm.expect(responseJson.price).to.eql(160.0);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"CarHire not edited.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{carHireID}}\",\r\n    \"status\": \"Active\",\r\n    \"days\": 3,\r\n    \"price\": 160.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/carHires",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-getCarHireById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['carHireID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.price).to.eql(160.0);\r",
+									"        pm.expect(responseJson.days).to.eql(3);\r",
+									"        pm.expect(responseJson.status).to.eql('Active');\r",
+									"        pm.expect(responseJson.id).to.match(/[0-z]{8}-[0-z]{4}-[0-z]{4}-[0-z]{4}-[0-z]{12}/);\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"carHireID not visible in getUserById.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6001/api/carHires/{{carHireID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires",
+								"{{carHireID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CarHire-deleteCarHire",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Default results are achieved.\", () => {\r",
+									"    responseJson = pm.response.json();\r",
+									"    testPass = false;\r",
+									"    if(responseJson.id === environment['carHireID']) {\r",
+									"        testPass = true;\r",
+									"        pm.expect(responseJson.message).to.eql('Car hire deleted.');\r",
+									"    }\r",
+									"\r",
+									"    if(!testPass) {\r",
+									"        pm.expect.fail(\"User delete error.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6001/api/carHires/{{carHireID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6001",
+							"path": [
+								"api",
+								"carHires",
+								"{{carHireID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

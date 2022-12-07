@@ -3,25 +3,25 @@ package pl.dev.CarHire.model.common;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 
 public class ApiError {
 
   private HttpStatus status;
-  private String message;
+  private String path;
   private List<String> errors;
 
-  public ApiError(HttpStatus status, String message, List<String> errors) {
+  public ApiError(HttpStatus status, String path, List<String> errorMessages) {
     super();
     this.status = status;
-    this.message = message;
-    this.errors = errors;
+    this.path = path;
+    this.errors = errorMessages;
   }
 
-  public ApiError(HttpStatus status, String message, String error) {
+  public ApiError(HttpStatus status, String path, String errorMessage) {
     super();
     this.status = status;
-    this.message = message;
-    errors = Arrays.asList(error);
+    this.path = path;
+    errors = Arrays.asList(errorMessage);
   }
 }

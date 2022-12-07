@@ -19,7 +19,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import pl.dev.CarHire.model.city.exception.NoSuchCityException;
 import pl.dev.CarHire.model.common.payload.DeleteResponse;
+import pl.dev.CarHire.model.user.exception.UserNotFoundException;
 import pl.dev.CarHire.model.user.payload.UserCreateRequest;
 import pl.dev.CarHire.model.user.payload.UserInstanceResponse;
 import pl.dev.CarHire.model.user.payload.UserUpdateRequest;
@@ -45,7 +47,7 @@ public class UserController {
       @RequestParam(value = "name_surname") Optional<String> nameSurname,
       @RequestParam(value = "status") Optional<String> status,
       @RequestParam(value = "email") Optional<String> email,
-      @RequestParam(value = "username") Optional<String> username) {
+      @RequestParam(value = "username") Optional<String> username) throws NoSuchCityException {
     List<UserInstanceResponse> responses = userService.findBy(
         role.orElse(null),
         city.orElse(null),
@@ -58,22 +60,23 @@ public class UserController {
   }
 
   @GetMapping("/users/{id}")
-  public User getUserById(@PathVariable String id) { return userService.getUserById(id); }
+  public User getUserById(@PathVariable String id) throws UserNotFoundException { return userService.getUserById(id); }
 
   @PostMapping("/users")
-  public ResponseEntity<UserInstanceResponse> addUser(@RequestBody UserCreateRequest newUser) throws HttpResponseException {
+  public ResponseEntity<UserInstanceResponse> addUser(@RequestBody UserCreateRequest newUser)
+      throws NoSuchCityException {
     UserInstanceResponse response = userService.addUser(newUser);
     return ResponseEntity.ok(response);
   }
 
   @PutMapping("/users")
-  public ResponseEntity<UserInstanceResponse> editUser(@RequestBody UserUpdateRequest updatedCar) {
+  public ResponseEntity<UserInstanceResponse> editUser(@RequestBody UserUpdateRequest updatedCar) throws NoSuchCityException {
     UserInstanceResponse response = userService.updateUser(updatedCar);
     return ResponseEntity.ok(response);
   }
 
   @DeleteMapping("/users/{id}")
-  public ResponseEntity<DeleteResponse> deleteCar(@PathVariable String id) {
+  public ResponseEntity<DeleteResponse> deleteCar(@PathVariable String id) throws UserNotFoundException {
     DeleteResponse response = userService.deleteUser(id);
     return ResponseEntity.ok(response);
   }
