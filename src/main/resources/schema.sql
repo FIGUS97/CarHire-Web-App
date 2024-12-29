@@ -54,10 +54,10 @@ VALUES(101,  'James Walin', 101,'Renting cars', 32, 'ACTIVE', 1, 'james', 'james
 INSERT INTO USER (ID_User, Name_Surname, ID_City, Responsibility, Age, Status, ID_Role, username, password )
 VALUES(102,  'Matt Hacketton', 102,'Renting cars', 32, 'ACTIVE', 1, 'matt', 'matt');
 
-INSERT INTO Car (ID_Car, Brand, Model, City, Price_Per_Day, Status )
-VALUES(120002,  'Opel', 'Adam',101, 90, 'Free');
-INSERT INTO Car (ID_Car, Brand, Model, City, Price_Per_Day, Status )
-VALUES(120003,  'Opel', 'Zafira',102, 120, 'Booked');
+INSERT INTO Car (ID_Car, Brand, Model, City, Price_Per_Day, Status, Type )
+VALUES(120002,  'Opel', 'Adam',101, 90, 'Free', 'Compact');
+INSERT INTO Car (ID_Car, Brand, Model, City, Price_Per_Day, Status, Type )
+VALUES(120003,  'Opel', 'Zafira',102, 120, 'Booked', 'Van');
 
 INSERT INTO USER (ID_User, Name_Surname, ID_City, Responsibility, Age, Status, ID_Role, username, password )
 VALUES(103,  'Anna Walin', 101,'', 32, 'ACTIVE', 2, 'anna', 'anna');
