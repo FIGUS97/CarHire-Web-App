@@ -1,9 +1,12 @@
 package pl.dev.CarHire.domain.offer.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import pl.dev.CarHire.domain.car.Car;
+import pl.dev.CarHire.domain.city.City;
 import pl.dev.CarHire.domain.user.User;
 
 import javax.persistence.*;
@@ -17,7 +20,7 @@ import javax.persistence.*;
 @ApiModel(description = "Customer's offer representation.")
 public class Offer {
     @Id
-    @Column(name = "ID_Hire", nullable = false)
+    @Column(name = "ID", nullable = false)
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     public String id;
@@ -37,6 +40,18 @@ public class Offer {
     @ApiModelProperty(notes = "Reference Id to offer's photos group.")
     public String photosReference;
 
-    @JoinColumn(name = "offerer")
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "user")
     public User offerer;
+
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "car")
+    public Car car;
+
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "city")
+    public City city;
 }

@@ -63,3 +63,8 @@ INSERT INTO USER (ID_User, Name_Surname, ID_City, Responsibility, Age, Status, I
 VALUES(103,  'Anna Walin', 101,'', 32, 'ACTIVE', 2, 'anna', 'anna');
 INSERT INTO USER (ID_User, Name_Surname, ID_City, Responsibility, Age, Status, ID_Role, username, password )
 VALUES(104,  'Roman Walin', 102,'', 32, 'ACTIVE', 2, 'roman', 'roman');
+
+INSERT INTO Offer (ID, DESCRIPTION, USER, PHOTOS_REFERENCE, PRICE_PER_DAY, TITLE, Car, City)
+VALUES(101, 'Description of an offer.', 101, null, 450, 'Opel Adam full opcja!', 120002, 101);
+INSERT INTO Offer (ID, DESCRIPTION, USER, PHOTOS_REFERENCE, PRICE_PER_DAY, TITLE, Car, City)
+VALUES(102, 'Description of an offer.', 102, null, 450, 'OPEL ZAFIRA for rent!', 120003, 102);

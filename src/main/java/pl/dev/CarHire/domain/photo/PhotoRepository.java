@@ -2,7 +2,10 @@ package pl.dev.CarHire.domain.photo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -10,7 +13,6 @@ import javax.persistence.*;
 @Entity
 @Table
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
