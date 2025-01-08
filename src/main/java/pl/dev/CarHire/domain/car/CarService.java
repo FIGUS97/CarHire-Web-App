@@ -1,7 +1,7 @@
 package pl.dev.CarHire.domain.car;
 
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 import pl.dev.CarHire.domain.car.exception.NoSuchCarException;
@@ -12,25 +12,20 @@ import pl.dev.CarHire.domain.city.City;
 import pl.dev.CarHire.domain.city.CityRepository;
 import pl.dev.CarHire.domain.city.exception.NoSuchCityException;
 import pl.dev.CarHire.domain.common.payload.DeleteResponse;
+import pl.dev.CarHire.domain.offer.OfferService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @ApplicationScope
+@RequiredArgsConstructor
 public class CarService {
 
-    @Autowired
-    private CarRepository carRepository;
-
-    @Autowired
-    private CityRepository cityRepository;
-
+    private final CarRepository carRepository;
+    private final CityRepository cityRepository;
     private final ModelMapper modelMapper;
-
-    public CarService() {
-        this.modelMapper = new ModelMapper();
-    }
+    private final OfferService offerService;
 
     public List<Car> getAllCars() {
         return carRepository.findAll();

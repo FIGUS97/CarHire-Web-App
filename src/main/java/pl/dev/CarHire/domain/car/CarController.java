@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +20,19 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 public class CarController {
 
     private final CarService carService;
 
-    public CarController(CarService carService) {
-        this.carService = carService;
+    @GetMapping("/car/{offerId}")
+    @Operation(summary = "Get the car of the offer.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Offer is found and car is delivered", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
+    public ResponseEntity<CarInstanceResponse> getOffersCar(
+            @PathVariable(value = "offerId") String offerId) {
+        return ResponseEntity.ok(carService.findBy(offerId));
     }
 
     @GetMapping("/cars")

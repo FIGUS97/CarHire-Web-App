@@ -1,11 +1,10 @@
 package pl.dev.CarHire.domain.offer;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.dev.CarHire.domain.offer.model.OfferItemResponse;
 import pl.dev.CarHire.domain.offer.model.OfferItemsRequest;
+import pl.dev.CarHire.domain.offer.model.OfferResponse;
 
 import java.util.List;
 
@@ -14,6 +13,11 @@ import java.util.List;
 public class OfferController {
 
     private final OfferService offerService;
+
+    @GetMapping("/offer/{id}")
+    public OfferResponse getOffer(@PathVariable("id") String offerId) {
+        return offerService.getOffer(offerId);
+    }
 
     @PostMapping("/offerItems")
     public List<OfferItemResponse> getOfferItems(@RequestBody OfferItemsRequest body) {

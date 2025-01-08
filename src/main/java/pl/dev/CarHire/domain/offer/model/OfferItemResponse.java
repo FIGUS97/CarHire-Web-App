@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OfferItemResponse {
+    public String offerId;
     public String title;
     public String owner;
     public String pricePerDay;
