@@ -14,7 +14,7 @@ public class OfferController {
 
     private final OfferService offerService;
 
-    @GetMapping("/offer/{id}")
+    @GetMapping("/offers/{id}")
     public OfferResponse getOffer(@PathVariable("id") String offerId) {
         return offerService.getOffer(offerId);
     }

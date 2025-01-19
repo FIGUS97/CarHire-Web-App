@@ -30,9 +30,9 @@ public class CarController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Offer is found and car is delivered", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
-    public ResponseEntity<CarInstanceResponse> getOffersCar(
+    public List<CarInstanceResponse> getOffersCar(
             @PathVariable(value = "offerId") String offerId) {
-        return ResponseEntity.ok(carService.findBy(offerId));
+        return carService.findBy(offerId, null);
     }
 
     @GetMapping("/cars")

@@ -24,7 +24,7 @@ public class CarService {
 
     private final CarRepository carRepository;
     private final CityRepository cityRepository;
-    private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper = new ModelMapper();
     private final OfferService offerService;
 
     public List<Car> getAllCars() {
